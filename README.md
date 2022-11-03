@@ -1,9 +1,9 @@
-# Gitlet Design Document
-
-**Name**: Frank Warren
+# gitlet design doc
 
 ## Classes and Data Structures
-######Static Variables
+
+###### Static Variables
+
 * `(File) Main.CWD` The working directory at Gitlet runtime.
 * `(File) Main.GITLET_FOLDER` Hidden folder in CWD that contains all files neccessary for Gitlet operation.
 * `(File) Main.REFS` Directory that contains one file for each branch. In those files is the SHA-1 ID of that branch's current head commit.
@@ -13,9 +13,12 @@
 * `(File) Main.ADD` Directory that contains the blobs staged for addition.
 * `(File) Main.REMOVE` Directory that contains the blobs staged for removal.
 
-###Commit
+### Commit
+
 This class represents commits.
-######Instance Variables
+
+###### Instance Variables
+
 * `(String) _id` - SHA-1 hash identifier.
 * `(String) _message`  - The message of a commit.
 * `(String) _timestamp` - Timestamp.
@@ -24,18 +27,25 @@ This class represents commits.
 * `(String) _secondParent` - For merged commits.
 * `(Hashmap<String, String>) _blobs` - Map of blobs *_file* to blobs *_id*.
 
-###Blob
+### Blob
+
 This class represents files as a filename and contents.
-######Instance Variables
+
+###### Instance Variables
+
 * `(String) _id` - SHA-1 hash identifier.
 * `(String) _file` - The filename of what it represents. (./_file)
 * `(Byte[]) _contents` - Serialized contents of a file.
 
 ## Algorithms
-######Main
+
+###### Main
+
 * All commands listed in the project spec.
 * `validateArgs(String[] args)` - called by all the commands to check for correct # arguments.
-######Commit
+
+###### Commit
+
 * `Commit(String message, String parent)` - Class constructor. `parent` is the SHA-1 id/filename of the parent of this commit. 
                                           The procedures of this constructor are:
                                           1. Copy parent state.
@@ -45,18 +55,21 @@ This class represents files as a filename and contents.
                                           5. Serialize and save this commit to '.gitlet/commits'.
 * `Commit()` - Constructs initial commit. 
    
-######Blob
+###### Blob
+
 * `Blob(String filePath)` The constructor for a blob object that represents the file at `filePath`. This constructor reads
                           the file's contents as a byte array to `_contents`. It also sets `_filename` before generating 
                           and setting the `_id`. 
                       
 
 ## Persistence
+
 Each command in Gitlet makes/modifies files and directories in CWD and ".gitlet/*".
 After each call to gitlet.Main, we want to save any new or changed commits/blobs to disk using `Utils.writeObject`. `Utils.writeObject(file, obj)` paramaters are the filepath we want to save
 an object to, and the object itself. So, blobs saved for staging go into `(Main.ADD|Main.REMOVE)/blob._id`, commits go into `Main.COMMITS/commit._id`, etc. 
 
-######Methods
+###### Methods
+
 Useful methods for persistence can be found in the `Utils` class. Additionally there are
 methods defined in `Main` to assist in persistence:
 * `Commit getHeadCommit()` Returns the current head commit object.
